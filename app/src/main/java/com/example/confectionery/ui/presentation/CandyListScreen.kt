@@ -12,20 +12,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.confectionery.R
 import com.example.confectionery.data.viewmodel.PartyConfectioneryViewModel
 import com.example.confectionery.domain.model.PartyConfectionery
 
 @Composable
-fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewModel
+fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewModel = hiltViewModel()
 ) {
-    val partyConfectioneries = viewModel.partyConfectioneries.collectAsState().value
+    val partyConfectioneries by viewModel.partyConfectioneries.collectAsState()
 
     Column(
         modifier = Modifier
@@ -52,7 +54,7 @@ fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewM
                 CandyBatchCard(
                     candyBatch = party,
                     onClick = {
-                        navController.navigate("candyDetail/${party.partyConfId}")
+                       // navController.navigate("candyDetail/${party.partyConfId}")
                     }
                 )
             }
@@ -82,11 +84,11 @@ fun CandyBatchCard(candyBatch: PartyConfectionery, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.surface
             )
             Text(
-                text = "Название: ${candyBatch.confectioneryAndManufacturer.confectioneryType.name}",
+                text = "Название: ${candyBatch.confAndItsManufId}",
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = "Производитель: ${candyBatch.confectioneryAndManufacturer.manufacturer.name}",
+                text = "Производитель: ${candyBatch.dateOfManufactureId}",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

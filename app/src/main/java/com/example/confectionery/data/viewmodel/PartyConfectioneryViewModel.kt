@@ -2,27 +2,33 @@ package com.example.confectionery.data.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.confectionery.data.repository.PartyConfectioneryRepositoryImpl
 import com.example.confectionery.domain.model.PartyConfectionery
-import com.example.confectionery.domain.repository.PartyConfectioneryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PartyConfectioneryViewModel(
-    private val repository: PartyConfectioneryRepository
+@HiltViewModel
+class PartyConfectioneryViewModel @Inject constructor(
+    private val repository: PartyConfectioneryRepositoryImpl
 ) : ViewModel() {
 
     private val _partyConfectioneries = MutableStateFlow<List<PartyConfectionery>>(emptyList())
     val partyConfectioneries: StateFlow<List<PartyConfectionery>> = _partyConfectioneries
 
     init {
-        fetchPartyConfectioneries()
+        getParty()
     }
 
-    private fun fetchPartyConfectioneries() {
-        viewModelScope.launch {
-            val data = repository.getPartyConfectioneries()
-            _partyConfectioneries.value = data
-        }
+    private fun getParty() {
+        viewModelScope.launch { _partyConfectioneries.value = repository.getParty() }
+    }
+    private fun addParty(){
+        viewModelScope.launch {  }
+    }
+    private fun deleteParty(){
+        viewModelScope.launch {  }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.confectionery.domain.model
 
+import java.util.Date
+
 data class PartyConfectionery(
     val partyConfId: Int,
-    val characteristics: CharacteristicsOfConfectionery,
-    val composition: CompositionOfConfectionery,
-    val confectioneryAndManufacturer: ConfectioneryAndItsManufacturer,
-    val dateOfManufacture: String,
+    val characteristicsId: Int,
+    val compositionId: Int,
+    val confAndItsManufId: Int,
+    val dateOfManufactureId: Date,
     val count: Int
 )

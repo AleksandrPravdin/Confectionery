@@ -1,8 +1,8 @@
 package com.example.confectionery.domain.model
 
-data class CharacteristicsOfConfectionery(
+data class Characteristics(
     val characteristicsId: Int,
-    val consistency: Consistency,
-    val form: Form,
+    val consistency: Int,
+    val form: Int,
     val size: String
 )
