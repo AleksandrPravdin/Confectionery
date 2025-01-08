@@ -8,9 +8,11 @@ import com.example.confectionery.data.remote.dto.ConsistencyDTO
 import com.example.confectionery.data.remote.dto.FormDTO
 import com.example.confectionery.data.remote.dto.ManufacturerDTO
 import com.example.confectionery.data.remote.dto.PartyConfectioneryDTO
+import com.example.confectionery.data.remote.dto.UserDTO
 import com.example.confectionery.domain.model.Confectionery
 import com.example.confectionery.domain.model.Manufacturer
 import com.example.confectionery.domain.model.PartyConfectionery
+import com.example.confectionery.domain.model.User
 import retrofit2.http.*
 
 interface ConfectioneryApi {
@@ -58,5 +60,8 @@ interface ConfectioneryApi {
     @POST("/api/confectionery")
     suspend fun addConfectionery(@Body confectionery: Confectionery)
 
-
+    @GET("/api/user")
+    suspend fun getUser(): List<UserDTO>
+    @POST("/api/user")
+    suspend fun createUser(@Body user: User)
 }

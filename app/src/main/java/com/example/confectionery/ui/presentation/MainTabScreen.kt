@@ -17,14 +17,16 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 
 @Composable
-fun MainTabsScreen(navController: NavController) {
+fun MainTabsScreen(navController: NavController, role: String) {
     val tabs = listOf("Confectionery batches", "Confectionery type", "Manufacturer")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Scaffold() {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = it.calculateTopPadding())) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = it.calculateTopPadding())
+        ) {
             TabRow(
                 selectedTabIndex = selectedTabIndex,
                 modifier = Modifier.fillMaxWidth()
@@ -41,8 +43,8 @@ fun MainTabsScreen(navController: NavController) {
             // Содержимое вкладок
             when (selectedTabIndex) {
                 0 -> CandyScreen(navController)
-                1 -> ConfectioneryTypeScreen()
-                2 -> ManufacturerScreen()
+                1 -> ConfectioneryTypeScreen(role)
+                2 -> ManufacturerScreen(role)
             }
         }
     }

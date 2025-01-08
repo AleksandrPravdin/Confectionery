@@ -9,6 +9,7 @@ import com.example.confectionery.data.repository.ConsistencyRepositoryImpl
 import com.example.confectionery.data.repository.FormRepositoryImpl
 import com.example.confectionery.data.repository.ManufacturerRepositoryImpl
 import com.example.confectionery.data.repository.PartyConfectioneryRepositoryImpl
+import com.example.confectionery.data.repository.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,5 +78,11 @@ object AppModule {
     @Singleton
     fun provideConfectioneryRepository(api: ConfectioneryApi): ConfectioneryRepositoryImpl {
         return ConfectioneryRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(api: ConfectioneryApi): UserRepositoryImpl {
+        return UserRepositoryImpl(api)
     }
 }

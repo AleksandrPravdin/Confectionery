@@ -47,7 +47,7 @@ import com.example.confectionery.domain.model.Confectionery
 import com.example.confectionery.ui.viewmodel.ConfectioneryViewModel
 
 @Composable
-fun ConfectioneryTypeScreen(viewModel: ConfectioneryViewModel = hiltViewModel()) {
+fun ConfectioneryTypeScreen(role: String, viewModel: ConfectioneryViewModel = hiltViewModel()) {
     val confectioneries by viewModel.confectionery.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -68,29 +68,37 @@ fun ConfectioneryTypeScreen(viewModel: ConfectioneryViewModel = hiltViewModel())
             items(confectioneries) { confectionery ->
                 ConfectioneryCard(
                     confectionery = confectionery,
-                    onDelete = { viewModel.deleteConfectionery(confectionery.confectioneryId) },
+                    canEdit = role == "admin",
+                    onDelete = {
+                        if (role == "admin") {
+                            viewModel.deleteConfectionery(confectionery.confectioneryId)
+                        }
+                    },
                     onUpdate = { newName ->
-                        viewModel.updateConfectionery(confectionery.confectioneryId, newName)
+                        if (role == "admin") {
+                            viewModel.updateConfectionery(confectionery.confectioneryId, newName)
+                        }
                     }
                 )
             }
         }
 
-        FloatingActionButton(
-            onClick = { showDialog = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(14.dp)
-                .size(65.dp),
-            containerColor = Color.White
-        ) {
-            Text(
-                text = "+",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
+        if (role == "admin") {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(14.dp)
+                    .size(65.dp),
+                containerColor = Color.White
+            ) {
+                Text(
+                    text = "+",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
-
         if (showDialog) {
             AddConfectioneryDialog(
                 onDismiss = { showDialog = false },
@@ -107,6 +115,7 @@ fun ConfectioneryTypeScreen(viewModel: ConfectioneryViewModel = hiltViewModel())
 @Composable
 fun ConfectioneryCard(
     confectionery: Confectionery,
+    canEdit: Boolean,
     onDelete: () -> Unit,
     onUpdate: (String) -> Unit
 ) {
@@ -123,7 +132,7 @@ fun ConfectioneryCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "ID: ${confectionery.confectioneryId}")
-            if (isEditing) {
+            if (isEditing && canEdit) {
                 TextField(
                     value = newName,
                     onValueChange = { newName = it },
@@ -143,13 +152,18 @@ fun ConfectioneryCard(
                 }
             } else {
                 Text(text = "Название: ${confectionery.name}")
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    Button(onClick = { isEditing = true }) {
-                        Text("Изменить")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = onDelete) {
-                        Text("Удалить")
+                if (canEdit) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Button(onClick = { isEditing = true }) {
+                            Text("Изменить")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(onClick = onDelete) {
+                            Text("Удалить")
+                        }
                     }
                 }
             }

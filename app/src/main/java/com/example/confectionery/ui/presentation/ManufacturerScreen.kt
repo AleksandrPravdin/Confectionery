@@ -49,7 +49,7 @@ import com.example.confectionery.ui.viewmodel.ConfectioneryViewModel
 import com.example.confectionery.ui.viewmodel.ManufacturerViewModel
 
 @Composable
-fun ManufacturerScreen(viewModel: ManufacturerViewModel = hiltViewModel()) {
+fun ManufacturerScreen(role: String, viewModel: ManufacturerViewModel = hiltViewModel()) {
     val manufacturer by viewModel.manufacturer.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -70,37 +70,46 @@ fun ManufacturerScreen(viewModel: ManufacturerViewModel = hiltViewModel()) {
             items(manufacturer) { manuf ->
                 ManufacturerCard(
                     manufacturer = manuf,
-                    onDelete = { viewModel.deleteManufacturer(manuf.manufacturerId) },
+                    canEdit = role == "admin",
+                    onDelete = {
+                        if (role == "admin") {
+                            viewModel.deleteManufacturer(manuf.manufacturerId)
+                        }
+                    },
                     onUpdate = { newName, newAddress ->
-                        viewModel.updateManufacturer(manuf.manufacturerId, newName, newAddress)
+                        if (role == "admin") {
+                            viewModel.updateManufacturer(manuf.manufacturerId, newName, newAddress)
+                        }
                     }
                 )
             }
         }
 
-        FloatingActionButton(
-            onClick = { showDialog = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(14.dp)
-                .size(65.dp),
-            containerColor = Color.White
-        ) {
-            Text(
-                text = "+",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
+        if (role == "amdmin") {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(14.dp)
+                    .size(65.dp),
+                containerColor = Color.White
+            ) {
+                Text(
+                    text = "+",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
 
-        if (showDialog) {
-            AddConfectioneryDialog(
-                onDismiss = { showDialog = false },
-                onAdd = { id, name, address ->
-                    viewModel.addManufacturer(id, name, address)
-                    showDialog = false
-                }
-            )
+            if (showDialog) {
+                AddConfectioneryDialog(
+                    onDismiss = { showDialog = false },
+                    onAdd = { id, name, address ->
+                        viewModel.addManufacturer(id, name, address)
+                        showDialog = false
+                    }
+                )
+            }
         }
     }
 }
@@ -109,6 +118,7 @@ fun ManufacturerScreen(viewModel: ManufacturerViewModel = hiltViewModel()) {
 @Composable
 fun ManufacturerCard(
     manufacturer: Manufacturer,
+    canEdit: Boolean,
     onDelete: () -> Unit,
     onUpdate: (String, String) -> Unit
 ) {
@@ -126,7 +136,7 @@ fun ManufacturerCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "ID: ${manufacturer.manufacturerId}")
-            if (isEditing) {
+            if (isEditing && canEdit) {
                 TextField(
                     value = newName,
                     onValueChange = { newName = it },
@@ -152,13 +162,18 @@ fun ManufacturerCard(
             } else {
                 Text(text = "Название: ${manufacturer.name}")
                 Text(text = "Адрес: ${manufacturer.address}")
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    Button(onClick = { isEditing = true }) {
-                        Text("Изменить")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = onDelete) {
-                        Text("Удалить")
+                if (canEdit) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Button(onClick = { isEditing = true }) {
+                            Text("Изменить")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(onClick = onDelete) {
+                            Text("Удалить")
+                        }
                     }
                 }
             }

@@ -16,19 +16,37 @@ import com.example.confectionery.ui.viewmodel.ManufacturerViewModel
 import com.example.confectionery.ui.viewmodel.PartyConfectioneryViewModel
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.gif.GifDecoder
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.confectionery.R
-
-
+@Composable
+fun GifImage() {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXFvbGk4bW5pMW5leWllZ3ZobnFqcDBucXc3amFpYnlteDhmZW5naCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZozaJfDLXhFJOor1ni/giphy.gif")
+            .decoderFactory(GifDecoder.Factory()) // Указываем использование GIF-декодера
+            .build(),
+        contentDescription = "GIF Image",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxWidth().clip(CircleShape)
+    )
+}
 @Composable
 fun CandyDetailScreen(
     candyId: Int, navController: NavController,
@@ -115,6 +133,9 @@ fun CandyDetailScreen(
                 text = "Количество: ${partyConfectionery?.count}",
                 style = MaterialTheme.typography.bodyLarge
             )
+        }
+        Box(modifier = Modifier.padding(20.dp)){
+            GifImage()
         }
     }
 }

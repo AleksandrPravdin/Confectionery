@@ -1,6 +1,6 @@
-package com.example.confectionery.domain.model
+package com.example.confectionery.data.remote.dto
 
-data class User(
+data class UserDTO(
     val userId: Int,
     val login: String,
     val password: String,

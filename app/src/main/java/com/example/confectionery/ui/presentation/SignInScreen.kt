@@ -1,5 +1,6 @@
 package com.example.confectionery.ui.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,11 +27,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.confectionery.R
+import com.example.confectionery.ui.viewmodel.UserViewModel
 
 @Composable
-fun SignInScreen(navController: NavController) {
+fun SignInScreen(navController: NavController, userViewModel: UserViewModel = hiltViewModel()) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
@@ -84,7 +87,16 @@ fun SignInScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                navController.navigate("mainTabsScreen")
+                if (password.value == confirmPassword.value && username.value.isNotBlank()) {
+                    userViewModel.registerUser(username.value, password.value)
+                    navController.navigate("logInScreen")
+                } else {
+                    // Покажите сообщение об ошибке
+                    Toast.makeText(
+                        navController.context, "Пароли не совпадают или логин пуст",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

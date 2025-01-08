@@ -21,8 +21,9 @@ fun AppNavigation() {
         composable("signInScreen") {
             SignInScreen(navController)
         }
-        composable("mainTabsScreen") {
-            MainTabsScreen(navController)
+        composable("mainTabsScreen?role={role}") { backStackEntry ->
+            val role = backStackEntry.arguments?.getString("role") ?: "simpleUser"
+            MainTabsScreen(navController, role)
         }
         composable("candyDetail/{partyConfId}") { backStackEntry ->
             val candyId = backStackEntry.arguments?.getString("partyConfId")?.toIntOrNull()!!
