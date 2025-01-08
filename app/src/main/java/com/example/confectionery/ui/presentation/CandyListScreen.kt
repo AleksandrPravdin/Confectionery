@@ -80,15 +80,13 @@ fun CandyScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 2.dp)
         ) {
-            items(partyConfectioneries) { comp ->
+            items(partyConfectioneries) { partyConfectionery ->
                 CandyBatchCard(
-                    candyBatch = comp,
-                    //cons = consistency.find { c->c.consistencyId==(characteristics.find { b->b.characteristicsId==(comp.characteristicsId) }?.consistencyId) }!!,
-                    //cons = form.find { c->c.formId==(characteristics.find { b->b.characteristicsId==(comp.characteristicsId) }?.formId) }!!,
-                    manuf = manufacturer.find { a->a.manufacturerId==(confManuf.find { c->c.confAndItsManufId==(comp.confAndItsManufId) }?.manufacturerId) }!!,
-                    conf = confectionery.find { a->a.confectioneryId==(confManuf.find { c->c.confAndItsManufId==(comp.confAndItsManufId) }?.confectioneryId) }!!,
+                    candyBatch = partyConfectionery,
+                    manuf = manufacturer.find { a->a.manufacturerId==(confManuf.find { c->c.confAndItsManufId==(partyConfectionery.confAndItsManufId) }?.manufacturerId) }!!,
+                    conf = confectionery.find { a->a.confectioneryId==(confManuf.find { c->c.confAndItsManufId==(partyConfectionery.confAndItsManufId) }?.confectioneryId) }!!,
                     onClick = {
-                        // navController.navigate("candyDetail/${party.partyConfId}")
+                         navController.navigate("candyDetail/${partyConfectionery.partyConfId}")
                     }
                 )
             }

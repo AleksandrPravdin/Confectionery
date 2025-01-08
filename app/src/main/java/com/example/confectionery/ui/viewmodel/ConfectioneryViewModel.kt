@@ -32,4 +32,40 @@ class ConfectioneryViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteConfectionery(id: Int) {
+        viewModelScope.launch {
+            try {
+                confectioneryRepositoryImpl.deleteConfectionery(id)
+                getConfectionery() // Обновляем список после удаления
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun updateConfectionery(id: Int, name: String) {
+        viewModelScope.launch {
+            try {
+                val updatedConfectionery = Confectionery(id, name)
+                confectioneryRepositoryImpl.updateConfectionery(id, updatedConfectionery)
+                getConfectionery() // Обновляем список после изменения
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun addConfectionery(id: Int, name: String) {
+        viewModelScope.launch {
+            try {
+                val newConfectionery = Confectionery(id, name)
+                confectioneryRepositoryImpl.addConfectionery(newConfectionery)
+                getConfectionery() // Обновляем список после добавления
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 }

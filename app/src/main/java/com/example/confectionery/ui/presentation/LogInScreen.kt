@@ -1,5 +1,6 @@
 package com.example.confectionery.ui.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -22,7 +23,7 @@ import androidx.navigation.NavController
 import com.example.confectionery.R
 
 @Composable
-fun RegistrationScreen(navController: NavController) {
+fun LogInScreen(navController: NavController) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
@@ -64,24 +65,22 @@ fun RegistrationScreen(navController: NavController) {
             Text(if (passwordVisible.value) "Скрыть" else "Показать")
         }
 
-        OutlinedTextField(
-            value = confirmPassword.value,
-            onValueChange = { confirmPassword.value = it },
-            label = { Text("Подтвердите пароль") },
-            visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth()
-        )
-
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                navController.navigate("candyList")
+                navController.navigate("mainTabsScreen")
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Войти")
         }
+
+        Text(
+            text = "Зарегистрироваться",
+            modifier = Modifier.clickable(onClick = {
+                navController.navigate("signInScreen")
+            })
+        )
     }
 }
 
