@@ -1,8 +1,8 @@
-package com.example.confectionery.domain.model
+package com.example.confectionery.data.remote.dto
 
-data class Characteristics(
+data class CharacteristicsDTO (
     val characteristicsId: Int,
     val consistencyId: Int,
     val formId: Int,
     val size: String
-)
+    )

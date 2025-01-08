@@ -1,7 +1,8 @@
-package com.example.confectionery.data.viewmodel
+package com.example.confectionery.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.confectionery.data.remote.dto.PartyConfectioneryDTO
 import com.example.confectionery.data.repository.PartyConfectioneryRepositoryImpl
 import com.example.confectionery.domain.model.PartyConfectionery
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ class PartyConfectioneryViewModel @Inject constructor(
 
     private val _partyConfectioneries = MutableStateFlow<List<PartyConfectionery>>(emptyList())
     val partyConfectioneries: StateFlow<List<PartyConfectionery>> = _partyConfectioneries
+
 
     init {
         getParty()

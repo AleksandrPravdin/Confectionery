@@ -1,6 +1,13 @@
 package com.example.confectionery.data.di
 
-import com.example.confectionery.data.api.ConfectioneryApi
+import com.example.confectionery.data.remote.api.ConfectioneryApi
+import com.example.confectionery.data.repository.CharacteristicsRepositoryImpl
+import com.example.confectionery.data.repository.CompositionRepositoryImpl
+import com.example.confectionery.data.repository.ConfManufRepositoryImpl
+import com.example.confectionery.data.repository.ConfectioneryRepositoryImpl
+import com.example.confectionery.data.repository.ConsistencyRepositoryImpl
+import com.example.confectionery.data.repository.FormRepositoryImpl
+import com.example.confectionery.data.repository.ManufacturerRepositoryImpl
 import com.example.confectionery.data.repository.PartyConfectioneryRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -29,5 +36,46 @@ object AppModule {
     @Singleton
     fun providePartyConfectioneryRepository(api: ConfectioneryApi): PartyConfectioneryRepositoryImpl {
         return PartyConfectioneryRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCompositionRepository(api: ConfectioneryApi): CompositionRepositoryImpl {
+        return CompositionRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideConsistencyRepository(api: ConfectioneryApi): ConsistencyRepositoryImpl {
+        return ConsistencyRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideManufacturerRepository(api: ConfectioneryApi): ManufacturerRepositoryImpl {
+        return ManufacturerRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFormRepository(api: ConfectioneryApi): FormRepositoryImpl {
+        return FormRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacteristicsRepository(api: ConfectioneryApi): CharacteristicsRepositoryImpl {
+        return CharacteristicsRepositoryImpl(api)
+    }
+    @Provides
+    @Singleton
+    fun provideConfManufRepository(api: ConfectioneryApi): ConfManufRepositoryImpl {
+        return ConfManufRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideConfectioneryRepository(api: ConfectioneryApi): ConfectioneryRepositoryImpl {
+        return ConfectioneryRepositoryImpl(api)
     }
 }

@@ -1,8 +1,8 @@
-package com.example.confectionery.domain.model
+package com.example.confectionery.data.remote.dto
 
 import java.util.Date
 
-data class PartyConfectionery(
+data class PartyConfectioneryDTO(
     val partyConfId: Int,
     val compositionId: Int,
     val characteristicsId: Int,

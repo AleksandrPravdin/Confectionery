@@ -21,13 +21,43 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.confectionery.R
-import com.example.confectionery.data.viewmodel.PartyConfectioneryViewModel
+import com.example.confectionery.ui.viewmodel.CompositionViewModel
+import com.example.confectionery.ui.viewmodel.PartyConfectioneryViewModel
+import com.example.confectionery.domain.model.Composition
+import com.example.confectionery.domain.model.ConfManuf
+import com.example.confectionery.domain.model.Confectionery
+import com.example.confectionery.domain.model.Consistency
+import com.example.confectionery.domain.model.Form
+import com.example.confectionery.domain.model.Manufacturer
 import com.example.confectionery.domain.model.PartyConfectionery
+import com.example.confectionery.ui.viewmodel.CharacteristicsViewModel
+import com.example.confectionery.ui.viewmodel.ConfManufViewModel
+import com.example.confectionery.ui.viewmodel.ConfectioneryViewModel
+import com.example.confectionery.ui.viewmodel.ConsistencyViewModel
+import com.example.confectionery.ui.viewmodel.FormViewModel
+import com.example.confectionery.ui.viewmodel.ManufacturerViewModel
 
 @Composable
-fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewModel = hiltViewModel()
+fun CandyScreen(
+    navController: NavController,
+    partyConfectioneryVM: PartyConfectioneryViewModel = hiltViewModel(),
+    compositionVM: CompositionViewModel = hiltViewModel(),
+    characteristicsVM: CharacteristicsViewModel = hiltViewModel(),
+    confectioneryVM: ConfectioneryViewModel = hiltViewModel(),
+    confManufVM: ConfManufViewModel = hiltViewModel(),
+    consistencyVM: ConsistencyViewModel = hiltViewModel(),
+    formVM: FormViewModel = hiltViewModel(),
+    manufacturerVM: ManufacturerViewModel = hiltViewModel()
 ) {
-    val partyConfectioneries by viewModel.partyConfectioneries.collectAsState()
+    val partyConfectioneries by partyConfectioneryVM.partyConfectioneries.collectAsState()
+    val compositions by compositionVM.compositions.collectAsState()
+    val characteristics by characteristicsVM.characteristics.collectAsState()
+    val confectionery by confectioneryVM.confectionery.collectAsState()
+    val confManuf by confManufVM.confManuf.collectAsState()
+    val consistency by consistencyVM.consistency.collectAsState()
+    val form by formVM.form.collectAsState()
+    val manufacturer by manufacturerVM.manufacturer.collectAsState()
+
 
     Column(
         modifier = Modifier
@@ -50,11 +80,15 @@ fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewM
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 14.dp, vertical = 2.dp)
         ) {
-            items(partyConfectioneries) { party ->
+            items(partyConfectioneries) { comp ->
                 CandyBatchCard(
-                    candyBatch = party,
+                    candyBatch = comp,
+                    //cons = consistency.find { c->c.consistencyId==(characteristics.find { b->b.characteristicsId==(comp.characteristicsId) }?.consistencyId) }!!,
+                    //cons = form.find { c->c.formId==(characteristics.find { b->b.characteristicsId==(comp.characteristicsId) }?.formId) }!!,
+                    manuf = manufacturer.find { a->a.manufacturerId==(confManuf.find { c->c.confAndItsManufId==(comp.confAndItsManufId) }?.manufacturerId) }!!,
+                    conf = confectionery.find { a->a.confectioneryId==(confManuf.find { c->c.confAndItsManufId==(comp.confAndItsManufId) }?.confectioneryId) }!!,
                     onClick = {
-                       // navController.navigate("candyDetail/${party.partyConfId}")
+                        // navController.navigate("candyDetail/${party.partyConfId}")
                     }
                 )
             }
@@ -63,7 +97,8 @@ fun CandyScreen(navController: NavController, viewModel: PartyConfectioneryViewM
 }
 
 @Composable
-fun CandyBatchCard(candyBatch: PartyConfectionery, onClick: () -> Unit) {
+fun CandyBatchCard(candyBatch: PartyConfectionery,manuf: Manufacturer,conf:Confectionery, onClick: () -> Unit) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,11 +119,15 @@ fun CandyBatchCard(candyBatch: PartyConfectionery, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.surface
             )
             Text(
-                text = "Название: ${candyBatch.confAndItsManufId}",
+                text = "Тип изделия: ${conf.name}",
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = "Производитель: ${candyBatch.dateOfManufactureId}",
+                text = "Производитель: ${manuf.name}",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+                text = "Дата изготовления: ${candyBatch.dateOfManufactureId}",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

@@ -1,5 +1,6 @@
 package com.example.confectionery.domain.repository
 
+import com.example.confectionery.data.remote.dto.PartyConfectioneryDTO
 import com.example.confectionery.domain.model.PartyConfectionery
 
 interface PartyConfectioneryRepository {
