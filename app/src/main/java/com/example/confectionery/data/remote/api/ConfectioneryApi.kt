@@ -9,6 +9,7 @@ import com.example.confectionery.data.remote.dto.FormDTO
 import com.example.confectionery.data.remote.dto.ManufacturerDTO
 import com.example.confectionery.data.remote.dto.PartyConfectioneryDTO
 import com.example.confectionery.domain.model.Confectionery
+import com.example.confectionery.domain.model.Manufacturer
 import com.example.confectionery.domain.model.PartyConfectionery
 import retrofit2.http.*
 
@@ -31,6 +32,13 @@ interface ConfectioneryApi {
     suspend fun getConsistency(): List<ConsistencyDTO>
     @GET("/api/manufacturer")
     suspend fun getManufacturer(): List<ManufacturerDTO>
+    @DELETE("/api/manufacturer/{id}")
+    suspend fun deleteManufacturer(@Path("id") id: Int)
+    @PUT("/api/manufacturer/{id}")
+    suspend fun updateManufacturer(@Path("id") id: Int, @Body manufacturer: Manufacturer)
+    @POST("/api/manufacturer")
+    suspend fun addManufacturer(@Body manufacturer: Manufacturer)
+
     @GET("/api/form")
     suspend fun getForm(): List<FormDTO>
 

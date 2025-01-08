@@ -9,15 +9,16 @@ class ConfectioneryRepositoryImpl(private val api: ConfectioneryApi) : Confectio
     override suspend fun getConfectionery(): List<Confectionery> {
         return api.getConfectionery().map { it.toDomainModel() }
     }
-    suspend fun deleteConfectionery(id: Int) {
+
+    override suspend fun deleteConfectionery(id: Int) {
         api.deleteConfectionery(id)
     }
 
-    suspend fun updateConfectionery(id: Int, confectionery: Confectionery) {
+    override suspend fun updateConfectionery(id: Int, confectionery: Confectionery) {
         api.updateConfectionery(id, confectionery)
     }
 
-    suspend fun addConfectionery(confectionery: Confectionery) {
+    override suspend fun addConfectionery(confectionery: Confectionery) {
         api.addConfectionery(confectionery)
     }
 
