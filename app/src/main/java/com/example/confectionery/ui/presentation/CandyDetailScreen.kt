@@ -18,11 +18,18 @@ import com.example.confectionery.ui.viewmodel.PartyConfectioneryViewModel
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +56,13 @@ fun GifImage() {
             .build(),
         contentDescription = "GIF Image",
         contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth().clip(CircleShape)
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(CircleShape)
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CandyDetailScreen(
     candyId: Int, navController: NavController,
@@ -79,83 +90,113 @@ fun CandyDetailScreen(
         partyConfectioneryVM.loadPartyConfectioneryDetail(candyId)
     }
 
-    val consistency = cons.find { c->c.consistencyId==(characteristics.find { b->b.characteristicsId==(partyConfectioneryDetail?.characteristicsId) }?.consistencyId) }
-    val form = forms.find { c->c.formId==(characteristics.find { b->b.characteristicsId==(partyConfectioneryDetail?.characteristicsId) }?.formId) }
-    val manufacturer = manufacturers.find { a->a.manufacturerId==(confManufs.find { c->c.confAndItsManufId==(partyConfectioneryDetail?.confAndItsManufId) }?.manufacturerId) }
-    val confectionery = conf.find { a->a.confectioneryId==(confManufs.find { c->c.confAndItsManufId==(partyConfectioneryDetail?.confAndItsManufId) }?.confectioneryId) }
-    val composition = compositions.find { c->c.compositionId==(partyConfectioneryDetail?.compositionId) }
-    val charact = characteristics.find {c->c.characteristicsId==(partyConfectioneryDetail?.characteristicsId) }
+    val consistency =
+        cons.find { c -> c.consistencyId == (characteristics.find { b -> b.characteristicsId == (partyConfectioneryDetail?.characteristicsId) }?.consistencyId) }
+    val form =
+        forms.find { c -> c.formId == (characteristics.find { b -> b.characteristicsId == (partyConfectioneryDetail?.characteristicsId) }?.formId) }
+    val manufacturer =
+        manufacturers.find { a -> a.manufacturerId == (confManufs.find { c -> c.confAndItsManufId == (partyConfectioneryDetail?.confAndItsManufId) }?.manufacturerId) }
+    val confectionery =
+        conf.find { a -> a.confectioneryId == (confManufs.find { c -> c.confAndItsManufId == (partyConfectioneryDetail?.confAndItsManufId) }?.confectioneryId) }
+    val composition =
+        compositions.find { c -> c.compositionId == (partyConfectioneryDetail?.compositionId) }
+    val charact =
+        characteristics.find { c -> c.characteristicsId == (partyConfectioneryDetail?.characteristicsId) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .paint(
-                painterResource(id = R.drawable.candy_background),
-                contentScale = ContentScale.Crop
-            ).padding(horizontal = 8.dp)
-    ) {
-        Button(onClick = { navController.popBackStack() }) {
-            Text("Назад")
-        }
-        Card(
-            modifier = Modifier.wrapContentSize(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondary
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Детальная информация", color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Назад"
+                        )
+                    }
+                }
             )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painterResource(id = R.drawable.candy_background),
+                    contentScale = ContentScale.Crop
+                )
+                .padding(paddingValues)
+                .padding(horizontal = 8.dp)
+                .padding(top = 4.dp)
         ) {
-            Text(
-                text = "ID Партии: ${partyConfectioneryDetail?.partyConfId}",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 8.dp).padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Название: ${confectionery?.name}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Производитель: ${manufacturer?.name}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Адрес производителя: ${manufacturer?.address}+\n",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Форма: ${form?.form}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Консистенция: ${consistency?.consistency}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Размер: ${charact?.size}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Состав: ${composition?.listOfProducts}+\n",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Дата производства: ${partyConfectioneryDetail?.dateOfManufactureId.toString().substring(4)}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = "Количество: ${partyConfectioneryDetail?.count}",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-        }
-        Box(modifier = Modifier.padding(20.dp)){
-            GifImage()
+            Card(
+                modifier = Modifier.wrapContentSize(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                )
+            ) {
+                Text(
+                    text = "ID Партии: ${partyConfectioneryDetail?.partyConfId}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Название: ${confectionery?.name}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Производитель: ${manufacturer?.name}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Адрес производителя: ${manufacturer?.address}+\n",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Форма: ${form?.form}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Консистенция: ${consistency?.consistency}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Размер: ${charact?.size}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Состав: ${composition?.listOfProducts}+\n",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Дата производства: ${
+                        partyConfectioneryDetail?.dateOfManufactureId.toString().substring(4)
+                    }",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+                Text(
+                    text = "Количество: ${partyConfectioneryDetail?.count}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+            Box(modifier = Modifier.padding(20.dp)) {
+                GifImage()
+            }
         }
     }
 }
