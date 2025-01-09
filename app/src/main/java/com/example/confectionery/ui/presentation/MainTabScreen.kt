@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainTabsScreen(navController: NavController, role: String) {
-    val tabs = listOf("Confectionery batches", "Confectionery type", "Manufacturer")
+    val tabs = listOf("Партии конд. изделий", "Типы конд. изделий", "Фирмы")
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     Scaffold() {
@@ -40,7 +40,6 @@ fun MainTabsScreen(navController: NavController, role: String) {
                 }
             }
 
-            // Содержимое вкладок
             when (selectedTabIndex) {
                 0 -> CandyScreen(navController)
                 1 -> ConfectioneryTypeScreen(role)

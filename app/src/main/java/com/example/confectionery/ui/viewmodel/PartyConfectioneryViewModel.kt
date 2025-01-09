@@ -14,23 +14,45 @@ import javax.inject.Inject
 @HiltViewModel
 class PartyConfectioneryViewModel @Inject constructor(
     private val repository: PartyConfectioneryRepositoryImpl
-) : ViewModel() {
+) : ViewModel()  {
 
     private val _partyConfectioneries = MutableStateFlow<List<PartyConfectionery>>(emptyList())
     val partyConfectioneries: StateFlow<List<PartyConfectionery>> = _partyConfectioneries
 
+    private val _partyConfectioneryDetail = MutableStateFlow<PartyConfectionery?>(null)
+    val partyConfectioneryDetail: StateFlow<PartyConfectionery?> = _partyConfectioneryDetail
+
+    private var currentPage = 0
+    private val pageSize = 10
+    private var isLoading = false
 
     init {
-        getParty()
+        loadNextPage()
+    }
+    fun loadPartyConfectioneryDetail(partyConfId: Int) {
+        viewModelScope.launch {
+            try {
+                val detail = repository.getPartyById(partyConfId)
+                _partyConfectioneryDetail.value = detail
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun getParty() {
-        viewModelScope.launch { _partyConfectioneries.value = repository.getParty() }
-    }
-    private fun addParty(){
-        viewModelScope.launch {  }
-    }
-    private fun deleteParty(){
-        viewModelScope.launch {  }
+    fun loadNextPage() {
+        if (isLoading) return
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                val newData = repository.getParty(currentPage, pageSize)
+                _partyConfectioneries.value = _partyConfectioneries.value + newData
+                currentPage++
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                isLoading = false
+            }
+        }
     }
 }

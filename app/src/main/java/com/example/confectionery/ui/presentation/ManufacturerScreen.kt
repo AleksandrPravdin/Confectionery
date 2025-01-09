@@ -85,7 +85,7 @@ fun ManufacturerScreen(role: String, viewModel: ManufacturerViewModel = hiltView
             }
         }
 
-        if (role == "amdmin") {
+        if (role == "admin") {
             FloatingActionButton(
                 onClick = { showDialog = true },
                 modifier = Modifier

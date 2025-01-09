@@ -7,6 +7,7 @@ import com.example.confectionery.data.remote.dto.ConfectioneryDTO
 import com.example.confectionery.data.remote.dto.ConsistencyDTO
 import com.example.confectionery.data.remote.dto.FormDTO
 import com.example.confectionery.data.remote.dto.ManufacturerDTO
+import com.example.confectionery.data.remote.dto.PagedResponse
 import com.example.confectionery.data.remote.dto.PartyConfectioneryDTO
 import com.example.confectionery.data.remote.dto.UserDTO
 import com.example.confectionery.domain.model.Confectionery
@@ -19,7 +20,13 @@ interface ConfectioneryApi {
 
 
     @GET("/api/partyconf")
-    suspend fun getPartyConfectionery(): List<PartyConfectioneryDTO>
+    suspend fun getPartyConfectionery(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): PagedResponse<PartyConfectioneryDTO>
+
+    @GET("/api/partyconf/{id}")
+    suspend fun getPartyConfectioneryById(@Path("id") id: Int): PartyConfectioneryDTO
 
     @POST("/api/partyconf")
     suspend fun addPartyConfectionery(@Body candy: PartyConfectionery): PartyConfectionery
@@ -32,12 +39,16 @@ interface ConfectioneryApi {
 
     @GET("/api/consistency")
     suspend fun getConsistency(): List<ConsistencyDTO>
+
     @GET("/api/manufacturer")
     suspend fun getManufacturer(): List<ManufacturerDTO>
+
     @DELETE("/api/manufacturer/{id}")
     suspend fun deleteManufacturer(@Path("id") id: Int)
+
     @PUT("/api/manufacturer/{id}")
     suspend fun updateManufacturer(@Path("id") id: Int, @Body manufacturer: Manufacturer)
+
     @POST("/api/manufacturer")
     suspend fun addManufacturer(@Body manufacturer: Manufacturer)
 
@@ -49,8 +60,10 @@ interface ConfectioneryApi {
 
     @GET("/api/confmanuf")
     suspend fun getConfManuf(): List<ConfManufDTO>
+
     @GET("/api/confectionery")
     suspend fun getConfectionery(): List<ConfectioneryDTO>
+
     @DELETE("/api/confectionery/{id}")
     suspend fun deleteConfectionery(@Path("id") id: Int)
 
@@ -62,6 +75,7 @@ interface ConfectioneryApi {
 
     @GET("/api/user")
     suspend fun getUser(): List<UserDTO>
+
     @POST("/api/user")
     suspend fun createUser(@Body user: User)
 }

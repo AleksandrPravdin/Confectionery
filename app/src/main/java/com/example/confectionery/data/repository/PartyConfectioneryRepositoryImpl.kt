@@ -9,8 +9,9 @@ import com.example.confectionery.domain.repository.PartyConfectioneryRepository
 
 class PartyConfectioneryRepositoryImpl(private val api: ConfectioneryApi) :
     PartyConfectioneryRepository {
-    override suspend fun getParty(): List<PartyConfectionery> {
-        return api.getPartyConfectionery().map { it.toDomainModel() }
+    override suspend fun getParty(page: Int, size: Int): List<PartyConfectionery> {
+        val response = api.getPartyConfectionery(page, size)
+        return response.content.map { it.toDomainModel() }
     }
 
     override suspend fun addParty(partyConfectionery: PartyConfectionery) =
@@ -18,5 +19,9 @@ class PartyConfectioneryRepositoryImpl(private val api: ConfectioneryApi) :
 
     override suspend fun deleteParty(id: Int) {
         withContext(Dispatchers.IO) { api.deletePartyConfectionery(id) }
+    }
+
+    override suspend fun getPartyById(id: Int): PartyConfectionery {
+        return api.getPartyConfectioneryById(id).toDomainModel()
     }
 }
